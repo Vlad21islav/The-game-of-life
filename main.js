@@ -2,72 +2,94 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const resolution = 10;
-let margin = document.body.style.margin = "5"
-canvas.height = document.body.scrollHeight - margin * 2
-canvas.width = document.body.scrollWidth - margin * 2
+let margin = 5; // Правильное использование переменной margin
+document.body.style.margin = `${margin}px`;
+canvas.height = document.body.scrollHeight - margin * 2;
+canvas.width = document.body.scrollWidth - margin * 2;
 const COLS = Math.round(canvas.width / resolution);
 const ROWS = Math.round(canvas.height / resolution);
+let mode = 'run'
 
-function buildGrid() {
-    return new Array(COLS).fill(null)
-        .map(() => new Array(ROWS).fill(null)
-            .map(() => Math.floor(Math.random() * 2)));
+let cells = [];
+for (let i = 0; i < COLS; i++) {
+    let otv = [];
+    for (let j = 0; j < ROWS; j++) {
+        otv.push(Math.round(Math.random()));
+    }
+    cells.push(otv);
 }
 
-let grid = buildGrid();
+function printMousePos(event) {
+    const x = event.clientX;
+    const y = event.clientY;
 
-function nextGeneration(grid) {
-    const nextGrid = grid.map(arr => [...arr]);
+    cells[Math.floor(x / resolution)][Math.floor(y / resolution)] = 1;
+}
+document.addEventListener('click', printMousePos);
 
-    for (let col = 0; col < grid.length; col++) {
-        for (let row = 0; row < grid[col].length; row++) {
-            const cell = grid[col][row];
-            let numNeighbors = 0;
-            for (let i = -1; i < 2; i++) {
-                for (let j = -1; j < 2; j++) {
-                    if (i === 0 && j === 0) {
-                        continue;
-                    }
-                    const xCell = col + i;
-                    const yCell = row + j;
-
-                    if (xCell >= 0 && yCell >= 0 && xCell < COLS && yCell < ROWS) {
-                        const currentNeighbor = grid[xCell][yCell];
-                        numNeighbors += currentNeighbor;
-                    }
-                }
-            }
-
-            if (cell === 1 && numNeighbors < 2) {
-                nextGrid[col][row] = 0;
-            } else if (cell === 1 && numNeighbors > 3) {
-                nextGrid[col][row] = 0;
-            } else if (cell === 0 && numNeighbors === 3) {
-                nextGrid[col][row] = 1;
-            }
+function near(pos) {
+    const system = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+    let count = 0;
+    for (let k = 0; k < system.length; k++) {
+        const [dx, dy] = system[k];
+        const x = pos[0] + dx;
+        const y = pos[1] + dy;
+        if (x >= 0 && x < COLS && y >= 0 && y < ROWS && cells[x][y]) {
+            count++;
         }
     }
-    return nextGrid;
+    return count;
 }
 
-function render(grid) {
-    for (let col = 0; col < grid.length; col++) {
-        for (let row = 0; row < grid[col].length; row++) {
-            const cell = grid[col][row];
+addEventListener('keypress', (event) => {
+    let key = event.key
+    if (key == 's') {
+        if (mode == 'run') {
+            mode = 'stop'
+        } else {
+            mode = 'run'
+        }
+    }
+}, true)
+
+setInterval(() => {
+    let new_cells = []; // B3/S23
+    for (let i = 0; i < COLS; i++) {
+        let new_row = [];
+        for (let j = 0; j < ROWS; j++) {
+            const count = near([i, j]);
+            if (mode == 'run') {
+                if (cells[i][j] && (count == 2 || count == 3)) {
+                    new_row.push(1);
+                } else if (!cells[i][j] && count == 3) {
+                    new_row.push(1);
+                } else {
+                    new_row.push(0);
+                }
+            } else {
+                new_row.push(cells[i][j]);
+            }
+
+            let color;
+            if (cells[i][j]) {
+                if (count >= 0 && count <= 1) {
+                    color = 'rgb(252, 135, 0)';
+                } else if (count === 2 || count === 3) {
+                    color = 'rgb(0, 184, 0)';
+                } else {
+                    color = 'rgb(250, 0, 0)';
+                }
+            } else {
+                color = 'white';
+            }
 
             ctx.beginPath();
-            ctx.rect(col * resolution, row * resolution, resolution, resolution);
-            ctx.fillStyle = cell ? 'red' : 'white';
+            ctx.rect(i * resolution, j * resolution, resolution, resolution);
+            ctx.fillStyle = color
             ctx.fill();
             ctx.stroke();
         }
+        new_cells.push(new_row);
     }
-}
-
-function update() {
-    grid = nextGeneration(grid);
-    render(grid);
-    requestAnimationFrame(update);
-}
-
-requestAnimationFrame(update);
+    cells = new_cells;
+}, 1000);
