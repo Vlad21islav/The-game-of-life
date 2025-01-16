@@ -1,0 +1,21 @@
+body {
+    background-color: black;
+}
+.button {
+    padding: 0.01em 0.4em; /* Поля по вертикали и горизонтали */
+    color: #fff; /* Белый цвет текста */
+    background-color: #213532; /* Цвет фона кнопки */
+    border-width: 0;
+    border-radius: 0.15em; /* Радиус скругления */
+    margin-bottom: 1rem; /* Отступ снизу */
+    margin-right: 1rem; /* Отступ справа */
+    position: absolute; 
+    z-index: 1;
+    top: 8;
+    right: -8;
+    font-size: 3rem;
+    line-height: 1.1;
+}
+#canvas {
+    position: absolute;
+}
