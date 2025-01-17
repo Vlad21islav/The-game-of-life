@@ -12,10 +12,11 @@ let mode = 'run'
 let buttonBarIsOpen = false
 let buttons = [
     ['≡', 'buttonPress()'],
-    ['отчистить', "buttonsFunctions('c')"],
-    ['рандомно заполнить', "buttonsFunctions('r')"],
-    ['остановить или запустить', "buttonsFunctions('s')"]
+    ['отчистить', "buttonsFunctions('c'), buttonPress()"],
+    ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"],
+    ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"]
 ]
+let button_pressed = false
 
 let cells = []
 for (let i = 0; i < COLS; i++) {
