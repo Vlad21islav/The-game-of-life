@@ -1,11 +1,11 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
-const resolution = 20
 let margin = 5
 document.body.style.margin = `${margin}px`
 canvas.height = document.body.scrollHeight - margin * 2
 canvas.width = document.body.scrollWidth - margin * 2
+const resolution = canvas.height / 34
 const COLS = Math.round(canvas.width / resolution)
 const ROWS = Math.round(canvas.height / resolution)
 let mode = 'run'
