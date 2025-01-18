@@ -13,8 +13,8 @@ let buttonBarIsOpen = false
 let buttons = [
     ['≡', 'buttonPress()'],
     ['отчистить', "buttonsFunctions('c'), buttonPress()"],
-    ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"],
     ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"]
+    ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"],
 ]
 let button_pressed = false
 
@@ -144,8 +144,17 @@ function buttonPress() {
         buttonBarIsOpen = false
     } else {
         for (let i = 0; i < buttons.length; i ++) {
+            if (buttons[i][0] == 'остановить или запустить') {
+                if (mode == 'run') {
+                    text = 'остановить'
+                } else {
+                    text = 'запустить'
+                }
+            } else {
+                text = buttons[i][0]
+            }
             button.innerHTML += `
-            <button style="top: ${60 * i + 8}; width: 620;text-align: right;" class="button" onclick="${buttons[i][1]}">${buttons[i][0]}</button>
+            <button style="top: ${60 * i + 8}; width: 620;text-align: right;" class="button" onclick="${buttons[i][1]}">${text}</button>
             `
         }
         buttonBarIsOpen = true
