@@ -13,8 +13,8 @@ let buttonBarIsOpen = false
 let buttons = [
     ['≡', 'buttonPress()'],
     ['отчистить', "buttonsFunctions('c'), buttonPress()"],
-    ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"]
-    ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"],
+    ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"],
+    ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"]
 ]
 let button_pressed = false
 
