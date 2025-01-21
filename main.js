@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
 let margin = 5
-document.body.style.margin = `${margin}px`
+document.body.style.margin = `20px`
 canvas.height = document.body.scrollHeight - margin * 2
 canvas.width = document.body.scrollWidth - margin * 2
 const resolution = canvas.height / 34
