@@ -5,7 +5,7 @@ let margin = 5
 document.body.style.margin = `${margin}px`
 canvas.height = document.body.scrollHeight - margin * 2
 canvas.width = document.body.scrollWidth - margin * 2
-const resolution = canvas.height / 34
+const resolution = canvas.height / 68
 const COLS = Math.round(canvas.width / resolution)
 const ROWS = Math.round(canvas.height / resolution)
 let mode = 'run'
@@ -25,6 +25,15 @@ for (let i = 0; i < COLS; i++) {
         otv.push(0)
     }
     cells.push(otv)
+}
+
+let colors = []
+for (let i = 0; i < COLS; i++) {
+    let otv = []
+    for (let j = 0; j < ROWS; j++) {
+        otv.push('black')
+    }
+    colors.push(otv)
 }
 
 function setPixel(event) {
@@ -162,9 +171,11 @@ function buttonPress() {
 }
 
 setInterval(() => {
-    let new_cells = []; // B3/S23
+    let new_cells = [] // B3/S23
+    let new_colors = []
     for (let i = 0; i < COLS; i++) {
         let new_row = []
+        let new_color_row = []
         for (let j = 0; j < ROWS; j++) {
             const count = near([i, j])
             if (mode == 'run') {
@@ -192,13 +203,19 @@ setInterval(() => {
                 color = 'white'
             }
 
-            ctx.beginPath()
-            ctx.rect(i * resolution, j * resolution, resolution, resolution)
-            ctx.fillStyle = color
-            ctx.fill()
-            ctx.stroke()
+            new_color_row.push(color)
+            
+            if (color != colors[i][j]) {
+                ctx.beginPath()
+                ctx.rect(i * resolution, j * resolution, resolution, resolution)
+                ctx.fillStyle = color
+                ctx.fill()
+                ctx.stroke()
+            } 
         }
         new_cells.push(new_row)
+        new_colors.push(new_color_row)
     }
     cells = new_cells
+    colors = new_colors
 }, 100)
