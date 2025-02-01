@@ -5,9 +5,9 @@ let margin = 5
 document.body.style.margin = `${margin}px`
 canvas.height = Math.round(document.body.scrollHeight - margin * 2)
 canvas.width = Math.round(document.body.scrollWidth - margin * 2)
-const resolution = Math.round(canvas.height / 68)
-const COLS = Math.round(canvas.width / resolution)
-const ROWS = Math.round(canvas.height / resolution)
+let resolution = Math.round(canvas.height / 68)
+let COLS = Math.round(canvas.width / resolution)
+let ROWS = Math.round(canvas.height / resolution)
 let mode = 'run'
 let buttonBarIsOpen = false
 let buttons = [
@@ -166,7 +166,48 @@ function buttonPress() {
             <button style="top: ${60 * i + 8}; width: 620;text-align: right;" class="button" onclick="${buttons[i][1]}">${text}</button>
             `
         }
+        button.innerHTML += `
+            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right;" class="button" onclick="editSize(+10)">+10</button>
+            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right; margin-right: ${620 / 2 + 4 + 16}px;" class="button" onclick="editSize(-10)">-10</button>
+            `
         buttonBarIsOpen = true
+    }
+}
+
+function editSize(size) {
+    let margin = 5
+    document.body.style.margin = `${margin}px`
+    canvas.height = Math.round(document.body.scrollHeight - margin * 2)
+    canvas.width = Math.round(document.body.scrollWidth - margin * 2)
+    resolution += size
+    COLS = Math.round(canvas.width / resolution)
+    ROWS = Math.round(canvas.height / resolution)
+    mode = 'run'
+    buttonBarIsOpen = false
+    buttons = [
+        ['≡', 'buttonPress()'],
+        ['отчистить', "buttonsFunctions('c'), buttonPress()"],
+        ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"],
+        ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"]
+    ]
+    button_pressed = false
+
+    cells = []
+    for (let i = 0; i < COLS; i++) {
+        let otv = []
+        for (let j = 0; j < ROWS; j++) {
+            otv.push(0)
+        }
+        cells.push(otv)
+    }
+
+    colors = []
+    for (let i = 0; i < COLS; i++) {
+        let otv = []
+        for (let j = 0; j < ROWS; j++) {
+            otv.push('black')
+        }
+        colors.push(otv)
     }
 }
 

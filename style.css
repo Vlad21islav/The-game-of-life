@@ -8,7 +8,7 @@ body {
     border-width: 0;
     border-radius: 0.15em; /* Радиус скругления */
     margin-bottom: 1rem; /* Отступ снизу */
-    margin-right: 1rem; /* Отступ справа */
+    margin-right: 16px; /* Отступ справа */
     position: absolute; 
     z-index: 1;
     top: 8;
