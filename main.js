@@ -3,9 +3,9 @@ const ctx = canvas.getContext('2d')
 
 let margin = 5
 document.body.style.margin = `${margin}px`
-canvas.height = document.body.scrollHeight - margin * 2
-canvas.width = document.body.scrollWidth - margin * 2
-const resolution = canvas.height / 68
+canvas.height = Math.round(document.body.scrollHeight - margin * 2)
+canvas.width = Math.round(document.body.scrollWidth - margin * 2)
+const resolution = Math.round(canvas.height / 68)
 const COLS = Math.round(canvas.width / resolution)
 const ROWS = Math.round(canvas.height / resolution)
 let mode = 'run'
@@ -207,7 +207,8 @@ setInterval(() => {
             
             if (color != colors[i][j]) {
                 ctx.beginPath()
-                ctx.rect(i * resolution, j * resolution, resolution, resolution)
+                ctx.strokeStyle = "black";
+                ctx.rect(i * resolution + 0.1, j * resolution + 0.1, resolution - 0.2, resolution - 0.2)
                 ctx.fillStyle = color
                 ctx.fill()
                 ctx.stroke()
