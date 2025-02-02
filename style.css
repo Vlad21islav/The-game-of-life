@@ -1,6 +1,7 @@
 body {
     background-color: black;
 }
+
 .button {
     padding: 0.01em 0.4em; /* Поля по вертикали и горизонтали */
     color: #fff; /* Белый цвет текста */
@@ -16,11 +17,13 @@ body {
     font-size: 3rem;
     line-height: 1.1;
 }
+
 #canvas {
     position: absolute;
 }
 
 #range {
+    accent-color: #b96516;
     height: 25px;
     width: 300px;
 }
