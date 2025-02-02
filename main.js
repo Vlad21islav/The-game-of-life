@@ -17,6 +17,10 @@ let buttons = [
     ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"]
 ]
 let button_pressed = false
+let interval = 100
+let next
+
+
 
 let cells = []
 for (let i = 0; i < COLS; i++) {
@@ -167,9 +171,21 @@ function buttonPress() {
             `
         }
         button.innerHTML += `
-            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right;" class="button" onclick="editSize(+10)">+10</button>
-            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right; margin-right: ${620 / 2 + 4 + 16}px;" class="button" onclick="editSize(-10)">-10</button>
+            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right;" class="button" onclick="editSize(+10)">+10px</button>
+            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right; margin-right: ${620 / 2 + 4 + 16}px;" class="button" onclick="editSize(-10)">-10px</button>
             `
+        button.innerHTML += `
+            <button style="top: ${60 * (buttons.length + 1) + 8}; width: 620; text-align: right;" class="button" onclick="">
+                скорость: 
+                <input id="range" type="range" min="100" max="3000"/>
+            </button>
+            `
+        let slider = document.getElementById('range')
+        slider.value = interval
+        slider.addEventListener( 'input', function(){
+            interval = parseInt(slider.value)
+            console.log(interval)
+        });
         buttonBarIsOpen = true
     }
 }
@@ -184,12 +200,6 @@ function editSize(size) {
     ROWS = Math.round(canvas.height / resolution)
     mode = 'run'
     buttonBarIsOpen = false
-    buttons = [
-        ['≡', 'buttonPress()'],
-        ['отчистить', "buttonsFunctions('c'), buttonPress()"],
-        ['остановить или запустить', "buttonsFunctions('s'), buttonPress()"],
-        ['рандомно заполнить', "buttonsFunctions('r'), buttonPress()"]
-    ]
     button_pressed = false
 
     cells = []
@@ -211,7 +221,12 @@ function editSize(size) {
     }
 }
 
-setInterval(() => {
+function tack() {
+    let now = (new Date).getTime();
+    if(next  &&  next > now) {
+        return
+    }
+    next = now + interval
     let new_cells = [] // B3/S23
     let new_colors = []
     for (let i = 0; i < COLS; i++) {
@@ -260,4 +275,6 @@ setInterval(() => {
     }
     cells = new_cells
     colors = new_colors
-}, 100)
+}
+
+setInterval(tack, 10)

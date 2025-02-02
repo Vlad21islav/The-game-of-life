@@ -19,3 +19,8 @@ body {
 #canvas {
     position: absolute;
 }
+
+#range {
+    height: 25px;
+    width: 300px;
+}
