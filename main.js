@@ -170,44 +170,47 @@ function buttonPress() {
             <button style="top: ${60 * i + 8}; width: 620;text-align: right;" class="button" onclick="${buttons[i][1]}">${text}</button>
             `
         }
+
         button.innerHTML += `
-            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right;" class="button" onclick="editSize(+10)">+10px</button>
-            <button style="top: ${60 * buttons.length + 8}; width: ${620 / 2 - 4}; text-align: right; margin-right: ${620 / 2 + 4 + 16}px;" class="button" onclick="editSize(-10)">-10px</button>
-            `
-        
-        button.innerHTML += `
-            <button style="top: ${60 * (buttons.length + 1) + 8}; width: 620; text-align: right;" class="button" onclick="">
-                скорость: 
-                <input id="range" type="range" min="100" max="3000" step="100"/>
+            <button style="top: ${60 * buttons.length + 8}; width: 620; text-align: right;" class="button">
+                размер: 
+                <input class="size range" type="range" min="5" max="100" step="5"/>
             </button>
             `
-        let slider = document.getElementById('range')
-        slider.value = interval
-        slider.oninput = function() {
-            var value = (this.value-this.min)/(this.max-this.min)*100
-            this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #fff ' + value + '%, white 100%)'
+        button.innerHTML += `
+            <button style="top: ${60 * (buttons.length + 1) + 8}; width: 620; text-align: right;" class="button">
+                скорость: 
+                <input class="speed range" type="range" min="100" max="3000" step="100"/>
+            </button>
+            `
+
+        let size_slider = document.querySelector('.size')
+        size_slider.value = resolution
+        size_slider.oninput = function() {
+            editSize(parseInt(size_slider.value))
+            console.log(resolution)
         };
-        slider.addEventListener( 'input', function(){
-            interval = parseInt(slider.value)
+        
+        let speed_slider = document.querySelector('.speed')
+        speed_slider.value = interval
+        speed_slider.oninput = function() {
+            interval = parseInt(speed_slider.value)
             console.log(interval)
-        });
+        };
+
         buttonBarIsOpen = true
     }
 }
 
 function editSize(size) {
-    console.log(size, resolution)
-    if (size < 0 && resolution + size <= 0 || size > 0 && resolution >= 100) return
-    let margin = 5
+    margin = 5
     document.body.style.margin = `${margin}px`
     canvas.height = Math.round(document.body.scrollHeight - margin * 2)
     canvas.width = Math.round(document.body.scrollWidth - margin * 2)
-    resolution += size
+    resolution = size
     COLS = Math.round(canvas.width / resolution)
     ROWS = Math.round(canvas.height / resolution)
     mode = 'run'
-    buttonBarIsOpen = false
-    button_pressed = false
 
     cells = []
     for (let i = 0; i < COLS; i++) {
